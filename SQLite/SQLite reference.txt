@@ -1,0 +1,79 @@
+Ctrl + C -> Force quit
+
+NB: Open CMD within the directory where the database(s) are located.
+
+NB: Use sql-sqlite-commands-cheat-sheet.pdf as primary reference. ie for shell commands, eg: check tables, schema, etc.
+
+=== CREATE OR OPEN AN EXISTING DATABASE =====
+sqlite3 firstdb.db		//DO NOT MISS THE EXTENSION .db
+
+ ---- ALTERNATIVELY, using the .open -----
+ 
+C:\sqlite\Databases>	sqlite3	//You must have used the sqlite3 command, then
+sqlite> .open mydb.db
+
+
+==== INSERTING VALUES INTO DATABASE =====
+
+---- ALTERENATIVE TO INSERTING INTO A DATABASE (Check the .pdf reference) -----
+INSERT INTO store (store_id, item_id, item_title) VALUES (01, 001, "FIRST ITEM");
+INSERT INTO store VALUES (01, 001, "FIRST ITEM");			// Alternative, ONLY IF you are inserting into all fields.
+
+------ INSERTING DEFAULT  VALUE TO A DATABASE -------
+CREATE TABLE t2(t_id INTEGER UNIQUE NOT NULL, t_name TEXT DEFAULT 'Default text');
+INSERT INTO t2(t_id) VALUES (10);
+SELECT * FROM t2;				//OUTPUT: 10|Default text
+
+----- CHECK VALUE TO BE INSERTED ----
+CREATE TABLE t3(t_id INTEGER, t_amount REAL CHECK(t_amount > 900));	//Cannot accept value for t_amount < 900.
+
+
+=== CHECK THE TABLES CREATED(if any) WITHIN THE OPENED DATABASE ===
+.tables		//NB: Does not end with ;
+
+
+==== ALTER TABLES ====
+CREATE TABLE t3(t_id INTEGER, t_amount REAL CHECK(t_amount > 900));
+ALTER TABLE t3 add t_name TEXT;			// Add new column t_name to end.
+ALTER TABLE t3 RENAME t_name to t_firstname;	// Rename column t_name to t_firstname.
+ALTER TABLE t3 RENAME to t3333;			// Rename table name.
+
+
+==== DELETE DATA FROM TABLE (Different from DROP)	=====
+ DELETE FROM store WHERE store_id = 1;	// Delete the record(s) with store_id = 1.
+ DELETE FROM store;				// Deletes all records within the table
+
+
+==== CHECK THE NAME OF THE DATABASE YOU ARE PRESENTLY WORKING ON ==========
+sqlite>	.databases
+
+
+==== BACKUP DATABASE =====
+Database name is mydb.db
+
+.backup mydb_backup.db		// Creates backup. THE .db EXTENSION IS NOT COMPULSORY
+.restore mydb_backup.db		//Restore backup into mydb.db, restoring previous tables.
+
+==== CLOSE or EXIT A DATABASE ======
+sqlite>	.q  OR .quit
+
+
+==== MODES (How the output will be displayed on SELECT * FROM table1 =========
+Default, ie: .mode list 	// 10|Default text.		
+Others;	 .mode csv		// 10,"Default text"
+		 .mode insert	// INSERT INTO "table"(t_id,t_name) VALUES(10,'Default text');
+		 .mode tab		// 10      Default text
+		 .mode column	// 10    Default text
+
+=== SAVE A TABLE/DATABASE AS A FILE (Not quite readable, I don't know the use for now) ===
+NB: If show 'database locked', quit, reopen the db, then call the save operation.
+
+sqlite>	.save store		// Name of table is store
+sqlite>	.save mydb		// Name of database is mydb.db, the extension .db NOT included when saving.
+
+
+
+========= DATE & TIME (in GMT) ============
+sqlite> SELECT DATE();		// 2023-03-13
+sqlite> SELECT TIME();		// 21:18:06
+sqlite> SELECT DATETIME();	// 2023-03-13 21:18:12

@@ -1,0 +1,19 @@
+NB: Database table columns names are collectively referred to as schemas.
+    Each column are individually referred to as fields.
+
+============= DATA TYPES ============
+- NULL:
+- INTEGER:
+- REAL(float/numeric)
+- TEXT (char/ varchar)
+- BLOB (Binary Larger Object): ie Images, videos, audios.
+
+
+====== CREATING TABLE WITH FOREIGN KEY ===============
+2 tables; dept and students.  dept has the primary key 'deptno' which is to be the foreign key for students table.
+
+CREATE TABLE students(roll INTEGER PRIMARY KEY, name TEXT, city TEXT, deptno INTEGER, FOREIGN KEY(deptno) references dept(deptno));
+
+NB: Foreign keys are not by default activated, we have to do so manually as shown below. Do this before inserting data into the table.
+sqlite> PRAGMA FOREIGN_KEYS=ON;
+
