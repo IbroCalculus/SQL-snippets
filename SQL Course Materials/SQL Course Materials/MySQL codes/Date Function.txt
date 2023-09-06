@@ -1,0 +1,13 @@
+SELECT * FROM sql_store.customers;
+
+SELECT *
+FROM customers
+WHERE year(birth_date) = "1986"
+
+SELECT *
+FROM customers
+WHERE month(birth_date) = "03"
+
+SELECT *
+FROM customers
+WHERE monthname(birth_date) = "January"

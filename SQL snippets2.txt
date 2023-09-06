@@ -1,0 +1,205 @@
+============ GETTING CURRENT DATE & TIME ===========
+NB: ("2023-01-19")  <- This is the format for inserting date. "yyyy-mm-dd")
+
+CREATE TABLE test( my_date DATE, my_time TIME, my_datetime DATETIME);
+INSERT INTO test VALUES (CURRENT_DATE(), CURRENT_TIME(), NOW());
+
+CURRENT_DATE() + 1 = Tomorrow
+
+SELECT CURRENT_DATE();		// OR, SELECT CURDATE();
+SELECT CURRENT_TIME();		// OR, SELECT CURTIME();
+SELECT NOW();			// Returns date-time		OR, SELECT SYSDATE();
+
+SELECT DAY("2022-12-27");	// OUTPUT: 27
+SELECT MONTH(NOW());		// OUTPUT: 6 (ie present month, June)
+
+SELECT MONTHNAME(NOW());	// OUTPUT: June
+SELECT DAYNAME("2022-12-27"); // ie Monday
+
+
+
+========= STORED PROCEDURE =============
+Stored procedure is prepared SQL code that you can save. It is useful if there's a query that you write often
+
+============ WITHOUT PARAMETERS ==============
+ --- To create the stored procedure ---
+DELIMITER &&						// OR DELIMETER // or DELIMETER $$
+CREATE PROCEDURE id2andAbove()
+BEGIN
+	SELECT first_name FROM personalinfo WHERE _id < 4;
+END &&
+DELIMITER ;
+
+ --- To call the stored procedure ---
+call id2andAbove();
+
+--- To drop stored procedure ---
+DROP PROCEDURE id2andAbove;
+
+
+============ WITH PARAMETERS ==============
+ --- To create the stored procedure ---
+DELIMITER &&
+CREATE PROCEDURE idAbove(IN var1 INT)
+BEGIN
+	SELECT first_name FROM personalinfo WHERE _id > var1;
+END &&
+DELIMITER ;
+
+ --- To call the stored procedure ---
+call idAbove(2);
+
+
+============= TRIGGER ================ 
+A trigger is like a function that is called when a certain condition is met
+
+--- To create a trigger ---
+Assume a table, student_records with columns st_id (INT), age (INT), name (VARCHAR), mark (INT).
+Trigger is; IF inserted mark < 20, then set mark = 20.008.
+
+DELIMITER &&
+CREATE TRIGGER mark_checker
+BEFORE INSERT ON student_record
+FOR EACH ROW 
+IF NEW.mark < 20 THEN SET NEW.mark = 20.008;
+END IF; &&
+DELIMITER ; 
+
+
+NB: Unlike stored procedures which have a directory to show all stored procedures associated with a table, 
+    there's non for triggers, you have to view list of triggers using the command, OR by clicking on the table structure, under triggers tab at the bottom tabs 
+
+--- To List Triggers ---
+SHOW TRIGGERS;
+
+--- To Delete Triggers ---
+DROP TRIGGER mark_checker;
+
+
+============== FUNCTIONS ===============
+They are majorly 4 built-in functions in MySQL;
+- String function
+- Numeric function
+- Date function
+- Aggregate function
+
+
+---- CREATE and CALL A FUNCTION ----
+
+CREATE FUNCTION name_age(fname VARCHAR(15), age INT(11))
+RETURNS VARCHAR(45) DETERMINISTIC
+RETURN CONCAT(fname, " ", age);
+
+SELECT name_age(name, age) AS NAME_AGE FROM student_record;
+
+
+----- STRING FUNCTIONS ----------
+Eg:
+SELECT UPPER(name) AS NAMEs FROM student_record;
+SELECT LOWER(name) AS NAMEs FROM student_record;
+SELECT LENGTH(name) AS NAMEs FROM student_record;
+SELECT CONCAT(name, ' --- ', age) AS NAME_AGE FROM student_record;
+SELECT CONCAT(TRIM("  Awesome  "), " Programming") AS Column1;
+SELECT INSTR("Ibrahim", "a");		// Position of a
+SELECT SUBSTR("Ibrahim", 5,2);
+
+----- NUMERIC FUNCTIONS ----------
+Eg:
+SELECT ABS(-213)
+SELECT SQRT(100);
+SELECT MOD(8,3);
+SELECT POW(2,5);
+SELECT TRUNCATE(24.876345,2);		// 2 dp
+SELECT TRUNCATE(24456.876345,-2);	// OUTPUT: 24400
+SELECT GREATEST(20,30,50,5,15);
+SELECT LEAST(20,30,50,5,15);
+
+
+------- AGGREGATE FUNCTION ---------
+Perform action on multiple rows of a single column
+
+SELECT AVG(mark) FROM student_record;
+SELECT COUNT(Mark) FROM student_record;		// Count the number of rows on the column 'mark'
+SELECT SUM(Mark) FROM student_record;
+SELECT MAX(Mark) FROM student_record;
+
+
+==================================== CONSTRAINTS ===========================
+---- 1. UNIQUE ----
+---- 2. NOT NULL ----
+
+---- 3. CHECK (used to limit what values can be placed in a column) ---
+CREATE TABLE employees2 (
+    employee_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    hourly_pay DECIMAL(5,2),
+    hire_date DATE,    
+    CONSTRAINT check_hourly_pay CHECK (hourly_pay >= 10.00)
+)
+
+- (To alter table's column if already exists without constraint) -
+ALTER TABLE employees2 ADD CONSTRAINT check_hourly_pay CHECK (hourly_pay >= 10.00)
+
+- (To delete a check) -
+ALTER TABLE employee2 DROP check_hourly_pay;
+
+
+---- 4. DEFAULT (if a value for a column is not specified, default value will be used instead) ----
+CREATE TABLE products (
+    product_id INT,
+    product_name VARCHAR(25),
+    price DECIMAL(4,2) DEFAULT 0.0
+);
+
+- (To alter table's column if already exists) -
+ALTER TABLE products ALTER price SET DEFAULT 0.0;
+
+
+---- 5. PRIMARY KEY -------
+CREATE TABLE members (
+	member_id INT PRIMARY KEY AUTO_INCREMENT,
+)
+
+- (To add primary key to a column that already exists) -
+ALTER TABLE members ADD CONSTRAINT PRIMARY KEY (member_id);
+
+- primary key with auto increment starting from a value other than 1 -
+ALTER TABLE members AUTO_INCREMENT = 1000;		//Starts from 1000 -> 10001 ...
+
+
+---- 6. FOREIGN KEY ----
+It is a primary key from one table that can be found on another table. It is used to link 2 tables.
+
+TABLE 1 (customers): customer_id (INT PK AI), first_name (VARCHAR(50)), last_name (VARCHAR(50));
+TABLE 2 (transactions): transaction_id (INT PK AI), amount(DECIMAL()), customer_id (INT)(Also the primary key);
+
+- 1. Create a table with a foreign key
+CREATE TABLE transactions (
+	transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    	amount DECIMAL (5,2),
+    	customer_idd INT,
+    	FOREIGN KEY (customer_idd) REFERENCES customers(customer_id)
+);
+
+- 2. Add a foreign key to an existing table/ Custom foreign key name
+
+ALTER TABLE transactions 
+ADD CONSTRAINT fk_customer_id 		// OPTIONAL, to give custom foreign key name
+FOREIGN KEY (customer_idd) REFERENCES customers(customer_id);
+
+- To drop a foreign key -
+ALTER TABLE transactions DROP FOREIGN KEY transactions_ibfk_1;
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,146 @@
+========== SHOW DATABASES =========
+SHOW DATABASES;
+
+========== CREATE DATABASE ======
+CREATE DATABASE myDB;
+
+===== VIEW CURRENT DATABASE BEING USED ======
+SELECT DATABASE();
+
+========== DROP DATABASE =========
+DROP DATABASE slimestore;
+
+======== USE A DATABASE ====
+USE myDB;   //or simply double-click on it within MySQL Workbench.
+NB: Creating a database does not mean the data will be used. To do so, after CREATE, call USE.
+
+========= MAKE DATABASE READ ONLY (Cannot modify or drop db) ==============
+ALTER DATABASE myDB READ ONLY = 1;
+
+========= MAKE DATABASE READ AND WRITE (Opposite of the above) ==============
+ALTER DATABASE myDb READ ONLY = 0;
+
+====== SHOW TABLES =========
+SHOW TABLES;
+
+===== DROP TABLE (delete table) ====
+DROP TABLE tableName;
+DROP TABLE table1, table2;
+
+NB: There is no mysql command for dropping all tables, either highlight on all in workbench and drop, or delete and recreate the database
+
+====== SHOW TABLE COLUMNS (Similar to SQLite schema) =====
+SHOW COLUMNS FROM dog;		// OR
+DESC dog;
+
+======== RENAME TABLE ==============
+RENAME TABLE employees TO workers;
+
+======== RENAME COLUMN WITHIN TABLE =========
+ALTER TABLE employees RENAME COLUMN phone_number TO email;
+
+======== ALTER COLUMN ========
+ALTER TABLE employees MODIFY COLUMN email VARCHAR(100);	//Alter column by changing varhar size.
+
+
+======== ALTER COLUMN POSITION (positon email column immediately after last_name column) ========
+ALTER TABLE employees MODIFY email VARCHAR(100) AFTER last_name;
+ALTER TABLE employees MODIFY email VARCHAR(100) FIRST;			// Make it the first column
+ALTER TABLE employees MODIFY price DECIMAL(4, 3) NOT NULL			// Added the NOT NULL constraint to the column
+
+======== ADD COLUMN TO TABLE ========
+ALTER TABLE employees ADD COLUMN job VARCHAR(100) AFTER last_name;
+
+=========== DROP COLUMN ===============
+ALTER TABLE employees DROP COLUMN email;
+
+
+=========== DUPLICATE TABLE (duplicates every content, ie columns and values) ===============
+The table 'personalInfo' exists, to be duplicated as 'personalInfo2'
+NOTE: You must check to compare all constraints after creating the copy. e.g: Primary key (PK) gets unchecked in duplicate copy, hence, you have to check it.
+
+CREATE TABLE personalInfo2 AS 
+SELECT * FROM personalinfo
+
+
+======= LIMIT CLAUSE ======
+SELECT * FROM employees ORDER BY first_name LIMIT 4;
+SELECT * FROM employees ORDER BY first_name LIMIT 2, 4;	//2 is offset, ie start from row index 2, limit to 4 rows.
+
+
+====== DATA TYPES ======
+VARCHAR(20), CHAR
+INT, FLOAT, DOUBLE, 
+DECIMAL(5,2)  -> ie 12345.98
+DATE
+DATETIME  ("2023-01-19")  <- This is the format for inserting date. "yyyy-mm-dd")
+
+
+
+====== COMMENTS ====
+-- DESC cats;   // CTRL + / Within Workbench
+
+====== DEFAULT VALUES ===========
+CREATE TABLE IF NOT EXISTS cat3(name VARCHAR(50) DEFAULT 'unnamed', age INT DEFAULT 99);
+
+
+====== REGULAR EXPRESSIONS (check also, LIKE ========
+SELECT * FROM customers WHERE last_name REGEXP 'field'
+SELECT * FROM customers WHERE last_name REGEXP 'field|mac|rose'			// Contains either field, mac or rose.
+
+SELECT * FROM customers WHERE last_name REGEXP '^field'				// Begins with field.
+SELECT * FROM customers WHERE last_name REGEXP 'field$'				// Ends with brush.
+
+SELECT * FROM customers WHERE last_name REGEXP '[gi]e'				// Contains ge or ie.
+SELECT * FROM customers WHERE last_name REGEXP '[a-h]e'				// Contains range ae to he.
+
+
+
+========= SUB QUERIES ===============
+1. Subquery within table
+SELECT * FROM student_record WHERE age > (SELECT AVG(age) FROM student_record)	// SELECT AVG(age)... is the subquery
+
+2. Subquery across tables (Assume tables orderdetails and products)
+SELECT productcode, productname, msrp FROM products WHERE productcode IN (SELECT productcode FROM orderdetails WHERE priceEach < 100);
+
+
+======= JOINS =======
+INNER JOIN (Intersects tables, ie joining both tables using foreign key from one whose value exists in the other)
+LEFT JOIN (Union of all rows of the left table)
+
+
+======= UNION ===========
+NB: Both SELECT statements must contain same number number of columns. (Not compulsory for both table columns must be same)
+
+SELECT first_name, last_name FROM employees
+UNION						// UNION does not allow duplicates, keeps only unique values
+SELECT first_name, last_name FROM customers;
+
+----------
+SELECT first_name, last_name FROM employees
+UNION ALL					// UNION ALL  allows duplicates
+SELECT first_name, last_name FROM customers;
+
+
+
+=============== VIEWS ==================
+- View is a virtual table based on the result-set of an SQL statement
+- The fields in a view are fields from one or more real tables in the database
+- They are not real tables, but can be interacted with as if they were real
+- It updates automatically when the values of the selected column(s) in the real table(s) are updated
+
+---- CREATE A VIEW --------
+Assume a table 'customers' with columns 'customer_id', 'first_name', 'last_name'. Create a view consisting of the last 2 only
+
+CREATE VIEW customer_fullname AS SELECT first_name, last_name FROM customers;
+SELECT * FROM customer_fullname;
+
+----- DROP A VIEW
+DROP VIEW customer_fullname;
+
+
+========== ROLLUP ===========
+It is an extention of the GROUP BY clause.
+It produces another row and shows the GRAND TOTAL (super-aggregate value)
+
+SELECT SUM(amount), order_date FROM transactions GROUP BY order_date WITH ROLLUP;

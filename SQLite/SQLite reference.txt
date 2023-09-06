@@ -7,11 +7,14 @@ NB: Use sql-sqlite-commands-cheat-sheet.pdf as primary reference. ie for shell c
 === CREATE OR OPEN AN EXISTING DATABASE =====
 sqlite3 firstdb.db		//DO NOT MISS THE EXTENSION .db
 
+NOTE: This .db file will not be immediately visible until after a table is created.
+
  ---- ALTERNATIVELY, using the .open -----
  
 C:\sqlite\Databases>	sqlite3	//You must have used the sqlite3 command, then
 sqlite> .open mydb.db
 
+NOTE: This .db file will be instantly available even without creating a table.
 
 ==== INSERTING VALUES INTO DATABASE =====
 
@@ -43,6 +46,8 @@ ALTER TABLE t3 RENAME to t3333;			// Rename table name.
  DELETE FROM store WHERE store_id = 1;	// Delete the record(s) with store_id = 1.
  DELETE FROM store;				// Deletes all records within the table
 
+
+NOTE: You cannot drop an SQLite database, except tables. To drop its database, simply locate and delete the file.
 
 ==== CHECK THE NAME OF THE DATABASE YOU ARE PRESENTLY WORKING ON ==========
 sqlite>	.databases
@@ -77,3 +82,4 @@ sqlite>	.save mydb		// Name of database is mydb.db, the extension .db NOT includ
 sqlite> SELECT DATE();		// 2023-03-13
 sqlite> SELECT TIME();		// 21:18:06
 sqlite> SELECT DATETIME();	// 2023-03-13 21:18:12
+CREATE TABLE "customer" ( "current_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)	//Auto input current date_time
