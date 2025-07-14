@@ -84,7 +84,7 @@ DATETIME  ("2023-01-19")  <- This is the format for inserting date. "yyyy-mm-dd"
 CREATE TABLE IF NOT EXISTS cat3(name VARCHAR(50) DEFAULT 'unnamed', age INT DEFAULT 99);
 
 
-====== REGULAR EXPRESSIONS (check also, LIKE ========
+====== REGULAR EXPRESSIONS (check also, LIKE) ========
 SELECT * FROM customers WHERE last_name REGEXP 'field'
 SELECT * FROM customers WHERE last_name REGEXP 'field|mac|rose'			// Contains either field, mac or rose.
 

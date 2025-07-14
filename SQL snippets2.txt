@@ -57,11 +57,11 @@ A trigger is like a function that is called when a certain condition is met
 Assume a table, student_records with columns st_id (INT), age (INT), name (VARCHAR), mark (INT).
 Trigger is; IF inserted mark < 20, then set mark = 20.008.
 
-DELIMITER &&
+DELIMITER &&F
 CREATE TRIGGER mark_checker
 BEFORE INSERT ON student_record
-FOR EACH ROW 
-IF NEW.mark < 20 THEN SET NEW.mark = 20.008;
+	FOR EACH ROW 
+	IF NEW.mark < 20 THEN SET NEW.mark = 20.008;
 END IF; &&
 DELIMITER ; 
 

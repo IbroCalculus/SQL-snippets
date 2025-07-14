@@ -1,0 +1,17 @@
+It is the process of creating a model for the database we want to store.
+It involves 4 steps:
+- 1. Understand and analyse the business requirements:
+	This is the foundational step where you gather and analyze the requirements for the data model. It involves understanding the business processes, the data needed to support those processes, and how the data will be used.
+
+- 2. Build a conceptual model:
+	It represents the entities and their relationships.
+	There are two ways to do this, either using Entity relationship (ER) diagrams, or Unified Modelling Language (UML)
+
+	Focusing on ER diagrams, tools to use include: Microsoft Visio, draw.io (Recommended), LucidCharts	
+
+- 3. Build a logical model:
+	A logical model is a more detailed representation of the data than the conceptual model. 
+	It includes additional details such as attributes, data types, and constraints, but it is still independent of any specific database management system (DBMS).
+
+- 4. Build a Physical Model (For a specific database management system):
+ 	It is the implementation of a logical model for a specific database management system (e.g, mysql).

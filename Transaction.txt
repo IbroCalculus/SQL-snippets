@@ -1,0 +1,84 @@
+A transaction is a sequence of one or more SQL operations (like INSERT, UPDATE, DELETE) treated as a single unit of work.
+Either all the operations succeed , or none do — ensuring your database remains in a consistent state.
+This is based on the ACID properties :
+
+- Atomicity: 		All operations in a transaction are completed or none are
+- Consistency:		The database remains in a valid state before and after the transaction
+- Isolation:		Transactions don’t interfere with each other
+- Durability:		Once a transaction is committed, its changes are permanent
+
+
+Example: Bank Transfer:
+
+Imagine transferring $100 from Alice to Bob:
+
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE name = 'Alice';
+UPDATE accounts SET balance = balance + 100 WHERE name = 'Bob';
+
+COMMIT;
+
+If everything goes well:
+	- Both updates happen.
+	- You run COMMIT → changes are saved.
+
+If something goes wrong (e.g., second update fails):
+	- You run ROLLBACK → both updates are undone.
+
+Transaction Control Commands
+START TRANSACTION:	-> Begins a new transaction
+COMMIT:			-> Saves all changes made during the transaction
+ROLLBACK:		-> Undoes all changes made during the transaction
+SAVEPOINT name:		-> Sets a point inside a transaction to roll back to later
+ROLLBACK TO name:	-> Rolls back to a specific savepoint
+
+
+
+Example with Savepoints:
+
+START TRANSACTION;
+
+UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 101;
+SAVEPOINT item_deducted;
+
+UPDATE accounts SET balance = balance - 50 WHERE user_id = 202;
+
+-- Something went wrong!
+ROLLBACK TO item_deducted;
+
+-- Now you can try again or cancel completely
+COMMIT;
+
+
+NB:
+Only engines that support transactions (like InnoDB ) can use them. MyISAM does not support transactions.
+By default, MySQL runs in auto-commit mode — meaning every query is its own transaction unless you explicitly start one.
+Always handle errors properly and use ROLLBACK when needed to avoid inconsistent data.
+
+
+
+
+
+====== How to Use Transactions in Stored Procedures ========
+DELIMITER $$
+
+CREATE PROCEDURE transfer_money(
+    IN from_user VARCHAR(50),
+    IN to_user VARCHAR(50),
+    IN amount DECIMAL(10,2)
+)
+BEGIN
+    START TRANSACTION;
+
+    UPDATE accounts SET balance = balance - amount WHERE name = from_user;
+    UPDATE accounts SET balance = balance + amount WHERE name = to_user;
+
+    IF ROW_COUNT() = 0 THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+END$$
+
+DELIMITER ;

@@ -1,0 +1,7 @@
+Declare variables:
+
+SET @user_name = "Yadel";
+SELECT * FROM clients WHERE name = @user_name;
+
+The above is known as user defined variables;
+There is also local variables, which is used within stored procedures. Google it.

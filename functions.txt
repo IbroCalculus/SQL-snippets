@@ -1,0 +1,12 @@
+Functions are similar to stored procedures.
+
+Differences between both: (Stored Procedure <-> Function)
+- Does not return a value directly (But can use OUT parameters) <-> Must return a single value
+- Can't be used directly in an SQL expression (e.g SELECT)	<-> Can be used in SQL expressions (e.g SELECT my_function())
+- Support multiple OUT and INOUT parameters 	<->	Only returns one value
+- Called using CALL proc_name()			<->	Used like SELECT function_name()
+- 
+
+============= Creating a function ================
+
+Right click on the function section on mysql

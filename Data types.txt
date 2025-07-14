@@ -1,0 +1,45 @@
+=== STRING ===
+CHAR(X);	Fixed
+VARCHAR():	max: 65,535 characters (~64KB)
+MEDIUMTEXT:	max: 16MB
+LONGTEXT:	max: 4GB
+
+TINYTEXT:	max: 255 bytes
+TEXT:		max: 64KB
+
+
+====== INTEGERS =======
+TINYINT: 1 byte [-128, 127]. 
+UNSIGNED TINYINT: takes only positive: [0, 255]
+SMALLINT: 2Byte [-32k, 32k]
+MEDIUMINT: 3Byte [+-8M]
+INT
+BIGINT
+
+Zerofill attribute, will add zeros to the beginning of the number. ie INT(4) = 0001
+
+========= FLOATING POINT NUMBERS ==========
+DECIMAL(Precision, Scale), eg:
+	DECIMAL(9,2) => 1234567.89
+	DECIMAL(9,3) => 123456.789
+
+FLOAT	4 Bytes
+DOUBLE	8 Bytes
+
+=========== BOOLEAN =======
+
+=========== ENUMS =========
+ENUM('small', 'medium', 'large')
+
+
+======== DATE and TIME =======
+Date, Time, Datetime, Timestamp, Year
+
+
+======== BLOBS ===========
+Large binary data:
+Tinyblob, Blob, MediumBlob, LongBlob.
+
+
+======= JSON ============
+

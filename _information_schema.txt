@@ -1,0 +1,40 @@
+The INFORMATION_SCHEMA is a system database in MySQL (and other SQL-compliant databases) that contains metadata — that is, data about your data .
+
+It provides access to database metadata such as:
+	- List of databases (schemas)
+	- List of tables
+	- Table structure (columns, data types, etc.)
+	- Indexes
+	- Privileges
+	- Constraints
+Think of it like a "database about your databases."
+
+USAGE:
+* 1. List All Databases (Schemas)
+	SELECT schema_name FROM information_schema.schemata;
+
+* 2. List All Tables in a Specific Database (openmrs)
+	SELECT table_name 
+	FROM information_schema.tables
+	WHERE table_schema = 'openmrs' AND table_type = 'BASE TABLE';
+
+* 3. List All Views in a Specific Database
+	SELECT table_name 
+	FROM information_schema.tables
+	WHERE table_schema = 'openmrs' AND table_type = 'VIEW';
+
+* 4. Get Column Details of a Table
+	SELECT column_name, data_type, is_nullable, column_key, extra
+	FROM information_schema.columns
+	WHERE table_schema = 'openmrs' AND table_name = 'person';
+
+* 5. Check Foreign Key Relationships
+	SELECT 
+    		constraint_name, table_name, column_name,
+    		referenced_table_name, referenced_column_name
+	FROM 
+    		information_schema.key_column_usage
+	WHERE 
+    		table_schema = 'openmrs'
+    		AND referenced_table_name IS NOT NULL;
+

@@ -1,0 +1,115 @@
+Stored procedure is just like saving some sql query in a function and calling the function when needed.
+
+NB: There are input parameters (IN) and output parameters (OUT).
+IN is similar to parameter arguments in functions, while OUT is used for return values. CHECK down for example using OUT
+
+=========== CREATE STORED PROCEDURE (Without passing parameter) ===========
+
+* --------- Right-click on the stored procedure object and create new: --------- 
+NB: Given the name for this procedure to be: GetPersonNames2
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPersonNames2`()
+BEGIN
+SELECT given_name, family_name, date_created FROM person_name_views;
+END
+
+
+* --------- Final query that will run after clicking Apply: ---------
+
+USE `openmrs`;
+DROP procedure IF EXISTS `openmrs`.`GetPersonNames2`;
+;
+
+
+DELIMITER $$
+USE `openmrs`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPersonNames2`()
+BEGIN
+SELECT given_name, family_name, date_created FROM person_name_views;
+END$$
+
+DELIMITER ;
+;
+
+============ USE THE STORED PROCEDURES ========
+
+CALL GetPersonNames2();
+
+
+
+
+============= 2a. CREATE STORED PROCEDURE (PASSING PARAMETER) ==============
+
+
+CREATE PROCEDURE `GetPersonNames3` (IN id_value INT)	-- For String, it will be: (IN id_name VARCHAR(50))		
+BEGIN
+	SELECT given_name, family_name FROM person_name_views WHERE person_name_id <= id_value;
+END
+
+
+* --------- Final query that will run after clicking Apply: ---------
+
+USE `openmrs`;
+DROP procedure IF EXISTS `GetPersonNames3`;
+
+DELIMITER $$
+USE `openmrs`$$
+CREATE PROCEDURE `GetPersonNames3` (IN id_value INT)
+BEGIN
+	SELECT given_name, family_name FROM person_name_views WHERE person_name_id <= id_value;
+END$$
+
+DELIMITER ;
+
+
+============ USE THE STORED PROCEDURES ========
+
+CALL GetPersonNames3(200);
+
+
+
+============= 2b. CREATE STORED PROCEDURE WITH DEFAULT PARAMETER ==============
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_client_name_phone`(IN client_name VARCHAR(50))
+BEGIN
+	IF client_name IS NULL THEN 
+		SET client_name = "Vinte"; 
+    	END IF;
+
+	SELECT phone FROM clients WHERE name = client_name;
+END
+
+
+--> Execute:  CALL get_client_name_phone(NULL);
+
+
+============= 2c. CREATE STORED PROCEDURE WITH DEFAULT PARAMETER (IF ELSE) ==============
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_client_name_phone`(IN client_name VARCHAR(50))
+BEGIN
+	IF client_name IS NULL THEN 
+		SET client_name = "Vinte"; 
+	ELSE
+		SELECT * FROM clients;
+    END IF;
+END
+
+
+
+==================== OUTPUT PARAMETER EXAMPLE =====================
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_client_name_phone`(
+    IN client_name VARCHAR(50),
+    OUT phone_number VARCHAR(20)
+)
+BEGIN
+    -- If client_name is NULL, use default name 'Vinte'
+    IF client_name IS NULL THEN 
+        SET client_name = 'Vinte'; 
+    END IF;
+
+    -- Get the phone number and store it in the output parameter
+    SELECT phone INTO phone_number
+    FROM clients
+    WHERE name = client_name
+    LIMIT 1; -- Optional: ensures only one result is assigned
+END

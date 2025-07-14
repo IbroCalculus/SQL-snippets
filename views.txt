@@ -1,0 +1,56 @@
+Views are virtual tables created from existing tables and exists within the views section.
+NB: In MySQL, views can't have same name as an existing table or view.
+
+============== 1. Views from a single table =======================
+CREATE VIEW biometricinfo_view AS SELECT * FROM biometricinfo;
+
+
+============== 2. Views from a joining tables =======================
+
+CREATE VIEW biometricinfo_view2 AS 
+	SELECT 
+	bi.patient_Id,
+        bi.fingerPosition, 
+        bi2.date_created,
+        bi2.serialNumber
+    FROM 
+		biometricinfo AS bi
+    JOIN 
+		biometricverificationinfo AS bi2 
+	ON
+		bi.patient_Id = bi2.patient_Id;
+
+
+============== 3. DYNAMICALLY CREATE VIEWS OF ALL TABLES IN A PARTICULAR DATABASE SCHEMA (ie openmrs) ============
+NB: a view cannot have same name as a table, hence why the '_view' used here joined to table_name.
+
+* Step 1:
+
+SELECT 
+    CONCAT('CREATE VIEW ', table_name, '_view AS SELECT * FROM openmrs.', table_name, ';') AS stmt
+FROM 
+    information_schema.tables
+WHERE 
+    table_schema = 'openmrs' AND table_type = 'BASE TABLE';
+
+
+* Step 2:
+	Copy the output rows, paste and execute as query to create the views
+
+
+
+================= 4. DYNAMICALLY DROP VIEWS ==============
+Similar to the above.
+
+* Step 1:
+
+SELECT 
+    CONCAT('DROP VIEW IF EXISTS ', table_name, '_view;') AS drop_stmt
+FROM 
+    information_schema.views
+WHERE 
+    table_schema = DATABASE();
+
+
+* Step 2:
+	Copy the output rows, paste and execute as query to create the views

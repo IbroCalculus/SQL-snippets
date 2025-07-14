@@ -1,0 +1,13 @@
+Concurrency refers to the ability of a database to allow multiple users or applications to access and modify data at the same time without interfering with each other.
+
+Example:
+ - User A is updating an order.
+ - User B is reading the same order.
+Both operations should be handled safely so that neither corrupts the data nor sees inconsistent results.
+
+What is Locking?
+Locking is how MySQL manages access to data during concurrent operations. It prevents conflicts by temporarily restricting access to certain data while it's being used by another operation.
+
+There are two main types of locks:
+ - Shared lock (S): 	Allows a transaction to read a row, but not update it. Other transactions can also read the same row.
+ - Exclusive lock (X):  Prevents any other transaction from reading or writing the locked row until the lock is released.
