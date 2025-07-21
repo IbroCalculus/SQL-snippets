@@ -7,7 +7,7 @@ It involves 4 steps:
 	It represents the entities and their relationships.
 	There are two ways to do this, either using Entity relationship (ER) diagrams, or Unified Modelling Language (UML)
 
-	Focusing on ER diagrams, tools to use include: Microsoft Visio, draw.io (Recommended), LucidCharts	
+	Focusing on ER diagrams, tools to use include: draw.io (Recommended), Microsoft Visio, LucidCharts	
 
 - 3. Build a logical model:
 	A logical model is a more detailed representation of the data than the conceptual model. 

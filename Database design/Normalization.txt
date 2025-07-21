@@ -1,0 +1,34 @@
+================== What is Normalization? ==================
+Normalization is the process of organizing data in a relational database to reduce redundancy and improve data integrity. It involves breaking down large tables into smaller, more manageable tables and defining relationships between them.
+The goal is to ensure that each piece of data is stored only once , unless explicitly needed for performance or design reasons (denormalization), and that changes to data are efficient and consistent.
+
+==================== Why Normalize? ====================
+Reduce data redundancy 		– Avoid storing the same data in multiple places.
+Minimize update anomalies 	– Prevent inconsistencies during insertions, updates, or deletions.
+Improve query performance 	– Well-structured data can be queried more efficiently.
+Ensure data integrity 		– Enforce consistency and accuracy of data.
+Make the database easier to maintain.
+
+==================== Normal Forms (NF) ====================
+Normalization is divided into several normal forms, each with specific rules. The most commonly used are:
+
+----- First Normal Form (1NF) -------
+Each cell should have a single value and we cannot have repeated columns.
+Goal: Eliminate duplicate columns and ensure atomic (indivisible) values in each column.
+Rules:
+ - Each table column must only contain atomic (indivisible) values (no lists or arrays).
+ - Each column must contain values of the same type.
+ - Each row must be uniquely identifiable (usually with a primary key).
+
+
+----- Second Normal Form (1NF) -------
+Rules:
+ - Must already satisfy 1NF.
+ - No partial dependency: All non-key columns must depend on the whole primary key, not just part of it.
+ - Applies only to tables with composite primary keys (if the table has only one column as PK, it's automatically 2NF if it's 1NF).
+
+----- Third Normal Form (1NF) -------
+Rules:
+ - Must satisfy 2NF.
+ - No transitive dependency: Non-key columns must not depend on other non-key columns.
+ - Every non-key attribute must depend only on the primary key.

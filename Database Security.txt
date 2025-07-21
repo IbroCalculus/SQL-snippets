@@ -1,0 +1,55 @@
+NB: All the below can be done via mysql workbench GUI, Adminstration tab -> Users and Privileges
+
+=============== CREATING A NEW USER ACCOUNT WITH LIMITED PERMISSIONS (aside the root user) ===============
+Assume creating a desktop application that can access our database, create a user account with limited priviledges that can be used by the application to access
+
+- CREATE USER admin2 IDENTIFIED BY 'AdminPassword'			(User can access from anywhere, any IP address)
+
+- CREATE USER admin2@127.0.0.1 IDENTIFIED BY 'AdminPassword'		(Restrict user to be able to access only from local server)
+- CREATE USER admin2@localhost IDENTIFIED BY 'AdminPassword'		(Same as above)
+
+- CREATE USER admin2@ibcalculus.com IDENTIFIED BY 'AdminPassword'	(Access only from the domain, ibsuleiman.com, but NOT sub domains)
+- CREATE USER admin2@'%.ibcalculus.com' IDENTIFIED BY 'AdminPassword'	(Access only from the domain, ibsuleiman.com, any any of its sub domains)
+
+
+=============== VIEWING LIST OF USERS ACCOUNT WITH LIMITED PERMISSIONS (aside the root user) ===============
+- SELECT * FROM mysql.user;
+
+
+================ DROPPING USERS =============
+DROP USER admin2@ibcalculus.com;
+
+
+================ CHANGING PASSWORDS =============
+SET PASSWORD FOR admin2 = 'NewAdminPassword		(Assuming you are logged in as admin changing for user admin2)
+SET PASSWORD = 'NewAdminPassword			(Assuming you are logged in as the user or admin, changing for yourself, the logged in account)
+
+
+
+================ GRANTING PRIVILEGES =============
+
+CREATE USER moon_app IDENTIFIED BY 'PSWD1234';		// Assuming just creating new user 
+
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE 
+ON sql_store.*						// where sql_store is name of the database, .* grants access to all tables within. Could be sql_store.customers_table ...
+TO moon_app;						// Could be moon_app@localhost 
+
+
+---- GRANT ALL PRIVILEGES TO NEW USER ---
+GRANT ALL
+ON *.*
+TO admin2;
+
+================ VIEWING PRIVILEGES =============
+SHOW GRANTS FOR 'root';					// WRONG, WON'T WORK. NEED HOST/IP AS SEEN BELOW
+SHOW GRANTS FOR 'root'@'localhost';
+
+SHOW GRANTS;						// SHOWS FOR CURRENT LOGGED IN USER
+
+
+
+================ REVOKE PRIVILEGES =============
+REVOKE CREATE VIEW
+ON sql_store.*
+FROM newuser2;
+
