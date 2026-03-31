@@ -9,26 +9,19 @@ Improve query performance 	– Well-structured data can be queried more efficien
 Ensure data integrity 		– Enforce consistency and accuracy of data.
 Make the database easier to maintain.
 
-==================== Normal Forms (NF) ====================
-Normalization is divided into several normal forms, each with specific rules. The most commonly used are:
+==================== Normal Forms (NF); Keep Vsalues Atomic ====================
+Normalization is divided into several normal forms, each with specific rules. The most commonly used are: 1NF, 2NF and 3NF.
 
 ----- First Normal Form (1NF) -------
-Each cell should have a single value and we cannot have repeated columns.
-Goal: Eliminate duplicate columns and ensure atomic (indivisible) values in each column.
-Rules:
- - Each table column must only contain atomic (indivisible) values (no lists or arrays).
- - Each column must contain values of the same type.
- - Each row must be uniquely identifiable (usually with a primary key).
+ - All rows must be unique (no duplicate rows)
+ - Each cell must only contain a single value, not lists, grouped items, or comma-separated values.
+ - Each value shold be non divisible (atomic; can't be split down further)
 
 
------ Second Normal Form (1NF) -------
-Rules:
- - Must already satisfy 1NF.
- - No partial dependency: All non-key columns must depend on the whole primary key, not just part of it.
+----- Second Normal Form (2NF); Remove Partial Dependencies -------
+ - Database table must be inf First Normal Form
+.- If a table has a composite primary key (two or more columns), then every non-key column should depend on all parts of that key, not just one.
  - Applies only to tables with composite primary keys (if the table has only one column as PK, it's automatically 2NF if it's 1NF).
 
------ Third Normal Form (1NF) -------
-Rules:
- - Must satisfy 2NF.
- - No transitive dependency: Non-key columns must not depend on other non-key columns.
- - Every non-key attribute must depend only on the primary key.
+----- Third Normal Form (3NF); Remove Transitive Dependencies -------
+ - No transitive dependency: Non-key columns should depend directly on the primary key, not on other non-key columns.
